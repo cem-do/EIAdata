@@ -43,3 +43,24 @@ dev_mode(on = F)
 ## and you are again using the CRAN version
 ```
 
+
+## Example: Downloading and Plotting Data
+
+The package includes a helper function `getEIA` for retrieving a series by its ID. The
+following example pulls daily crude oil prices and shows how to graph them.
+
+```R
+library(EIAdata)
+
+key <- "YOUR_API_KEY"
+series_ids <- c(WTI = "PET.RWTC.D", Brent = "PET.RBRTE.D")
+prices <- lapply(series_ids, getEIA, key = key)
+prices_xts <- do.call(merge, prices)
+
+plot(prices_xts, major.ticks = 'years', main = "WTI vs Brent Spot Prices")
+
+spread <- prices_xts$WTI - prices_xts$Brent
+plot(spread, main = "WTI minus Brent Spread")
+```
+
+The same code is available in `examples/get_and_plot.R`.
